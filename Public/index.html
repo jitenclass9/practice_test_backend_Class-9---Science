@@ -173,63 +173,71 @@
     <iframe id="viewer" src=""></iframe>
   </div>
 
-  <script>
-    const BACKEND_URL = "https://practice-test-backend-class-9-science-r94f.onrender.com";
 
-    async function login() {
-      const email = document.getElementById("emailInput").value.trim().toLowerCase();
-      if (!email || !email.includes("@")) { alert("Your E.Mail ID is not Registered. For registration call +91 9706380857."); return; }
+<script>
+const BACKEND_URL = "https://practice-test-backend-class-9-science-r94f.onrender.com";
 
-      const res = await fetch(`${BACKEND_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-      const data = await res.json();
-      if (data.token) {
-        localStorage.setItem("studentEmail", email);
-        localStorage.setItem("sessionToken", data.token);
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("appContainer").style.display = "block";
-      } else { alert("Login failed. Try again."); }
-    }
+// LOGIN SYSTEM
+async function login() {
+  const email = document.getElementById("emailInput").value.trim().toLowerCase();
+  if (!email || !email.includes("@")) {
+    alert("Your E.Mail ID is not Registered. For registration call +91 9706380857.");
+    return;
+  }
+  const res = await fetch(`${BACKEND_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  });
+  const data = await res.json();
+  if (data.token) {
+    localStorage.setItem("studentEmail", email);
+    localStorage.setItem("sessionToken", data.token);
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+  } else {
+    alert("Login failed. Try again.");
+  }
+}
 
-    window.onload = async function() {
-      const savedEmail = localStorage.getItem("studentEmail");
-      const token = localStorage.getItem("sessionToken");
-      if (!savedEmail || !token) return;
+window.onload = async function () {
+  const savedEmail = localStorage.getItem("studentEmail");
+  const token = localStorage.getItem("sessionToken");
+  if (!savedEmail || !token) return;
+  const res = await fetch(`${BACKEND_URL}/validate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: savedEmail, token })
+  });
+  const data = await res.json();
+  if (data.valid) {
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+  } else {
+    localStorage.clear();
+  }
+};
 
-      const res = await fetch(`${BACKEND_URL}/validate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: savedEmail, token })
-      });
-      const data = await res.json();
-      if (data.valid) {
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("appContainer").style.display = "block";
-      } else { localStorage.clear(); }
-    };
+setInterval(async () => {
+  const email = localStorage.getItem("studentEmail");
+  const token = localStorage.getItem("sessionToken");
+  if (!email || !token) return;
+  const res = await fetch(`${BACKEND_URL}/validate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, token })
+  });
+  const data = await res.json();
+  if (!data.valid) {
+    alert("⚠️ You have been logged out because this account was opened on another device.");
+    localStorage.clear();
+    location.reload();
+  }
+}, 5000);
 
-    setInterval(async () => {
-      const email = localStorage.getItem("studentEmail");
-      const token = localStorage.getItem("sessionToken");
-      if (!email || !token) return;
-      const res = await fetch(`${BACKEND_URL}/validate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, token })
-      });
-      const data = await res.json();
-      if (!data.valid) {
-        alert("⚠️ You have been logged out because this account was opened on another device.");
-        localStorage.clear();
-        location.reload();
-      }
-    }, 5000);
 
-    // Catalog JSON
-    const catalog = {
+// === MAIN LOGIC ===
+ const catalog = {
       "Topic wise mcq (basic)": {
               "Chapter 1 - Matter In Our Surroundings": {
               "1. Physical Nature of Matter – Matter is made up of particles": "https://jitenclass9.github.io/class9-E-Matter-in-our-Surrounding/1. Physical Nature of Matter – Matter is made up of particles.html",
@@ -412,90 +420,95 @@
       }
     };
 
-    const levelSelect   = document.getElementById('levelSelect');
-    const chapterSelect = document.getElementById('chapterSelect');
-    const itemSelect    = document.getElementById('itemSelect');
-    const topicLabel    = document.getElementById('topicLabel');
-    const viewer        = document.getElementById('viewer');
-    const controls      = document.getElementById('controls');
-    const headerBar     = document.getElementById('headerBar');
+const levelSelect = document.getElementById("levelSelect");
+const chapterSelect = document.getElementById("chapterSelect");
+const itemSelect = document.getElementById("itemSelect");
+const topicLabel = document.getElementById("topicLabel");
+const viewer = document.getElementById("viewer");
+const controls = document.getElementById("controls");
+const headerBar = document.getElementById("headerBar");
 
-    function resetSelect(selectEl, placeholderText, disable = false) {
-      selectEl.innerHTML = `<option value="">${placeholderText}</option>`;
-      selectEl.disabled = disable;
-    }
-    function fillSelect(selectEl, items) { items.forEach(v => { selectEl.innerHTML += `<option value="${v}">${v}</option>`; }); selectEl.disabled = false; }
-    function getKeys(obj) { return obj ? Object.keys(obj) : []; }
+function resetSelect(sel, placeholder, disable = false) {
+  sel.innerHTML = `<option value="">${placeholder}</option>`;
+  sel.disabled = disable;
+}
+function fillSelect(sel, arr) {
+  arr.forEach(v => sel.innerHTML += `<option value="${v}">${v}</option>`);
+  sel.disabled = false;
+}
+function getKeys(obj) { return obj ? Object.keys(obj) : []; }
 
-    levelSelect.addEventListener('change', () => {
-      const lvl = levelSelect.value;
-      resetSelect(chapterSelect, 'Select Chapter', true);
-      resetSelect(itemSelect, 'Select Topic / Year', true);
-      viewer.src = '';
-      viewer.style.height = "450px";
-      if (!lvl || !catalog[lvl]) return;
-      fillSelect(chapterSelect, getKeys(catalog[lvl]));
-    });
+levelSelect.addEventListener("change", () => {
+  const lvl = levelSelect.value;
+  resetSelect(chapterSelect, "Select Chapter", true);
+  resetSelect(itemSelect, "Select Topic / Year", true);
+  viewer.src = "";
+  if (!lvl || !catalog[lvl]) return;
+  fillSelect(chapterSelect, getKeys(catalog[lvl]));
+});
 
-    chapterSelect.addEventListener('change', () => {
-      const lvl  = levelSelect.value;
-      const chap = chapterSelect.value;
-      resetSelect(itemSelect, 'Select Topic / Year', true);
-      viewer.src = '';
-      viewer.style.height = "450px";
-      if (!lvl || !chap || !catalog[lvl]?.[chap]) return;
-      fillSelect(itemSelect, getKeys(catalog[lvl][chap]));
-    });
+chapterSelect.addEventListener("change", () => {
+  const lvl = levelSelect.value;
+  const chap = chapterSelect.value;
+  resetSelect(itemSelect, "Select Topic / Year", true);
+  viewer.src = "";
+  if (!lvl || !chap || !catalog[lvl]?.[chap]) return;
+  fillSelect(itemSelect, getKeys(catalog[lvl][chap]));
+});
 
-    itemSelect.addEventListener('change', () => { if (itemSelect.value) loadURL(); });
+itemSelect.addEventListener("change", () => { if (itemSelect.value) loadURL(); });
 
-    function loadURL() {
-      const lvl  = levelSelect.value;
-      const chap = chapterSelect.value;
-      const item = itemSelect.value;
-      if (!lvl || !chap || !item) return;
-      const url = catalog[lvl][chap][item];
-      viewer.src = url;
-      viewer.style.height = "650px";
-      controls.classList.add('hidden');
+function loadURL() {
+  const lvl = levelSelect.value;
+  const chap = chapterSelect.value;
+  const item = itemSelect.value;
+  if (!lvl || !chap || !item) return;
+  const url = catalog[lvl][chap][item];
+  viewer.src = url;
+  viewer.style.height = "650px";
 
-      let inlineDiv = document.createElement('div');
-      inlineDiv.className = 'inline-topic';
-      inlineDiv.appendChild(topicLabel);
-      inlineDiv.appendChild(itemSelect);
+  const inline = headerBar.querySelector(".inline-topic");
+  if (inline) inline.remove();
 
-      if (window.innerWidth > 600) {
-        headerBar.appendChild(inlineDiv);
-      } else {
-        controls.appendChild(topicLabel);
-        controls.appendChild(itemSelect);
-      }
-    }
+  if (window.innerWidth > 600) {
+    // Desktop: show beside Back button
+    controls.classList.add("hidden");
+    const inlineDiv = document.createElement("div");
+    inlineDiv.className = "inline-topic";
+    inlineDiv.appendChild(topicLabel);
+    inlineDiv.appendChild(itemSelect);
+    headerBar.appendChild(inlineDiv);
+  } else {
+    // Mobile: show only Topic/Year below Back button
+    controls.classList.remove("hidden");
+    document.getElementById("levelSelect").classList.add("hidden");
+    document.querySelector("label[for='levelSelect']").classList.add("hidden");
+    document.getElementById("chapterSelect").classList.add("hidden");
+    document.querySelector("label[for='chapterSelect']").classList.add("hidden");
+    controls.appendChild(topicLabel);
+    controls.appendChild(itemSelect);
+  }
+}
 
-    function resetAll() {
-      viewer.src = '';
-      viewer.style.height = "450px";
-      resetSelect(levelSelect, 'Select Level / Years', false);
-      resetSelect(chapterSelect, 'Select Chapter', true);
-      resetSelect(itemSelect, 'Select Topic / Year', true);
-      fillSelect(levelSelect, getKeys(catalog));
-      controls.classList.remove('hidden');
-      const inline = headerBar.querySelector('.inline-topic');
-      if (inline) inline.remove();
-      controls.appendChild(topicLabel);
-      controls.appendChild(itemSelect);
-    }
+function resetAll() {
+  viewer.src = "";
+  viewer.style.height = "450px";
+  resetSelect(levelSelect, "Select Level / Years", false);
+  resetSelect(chapterSelect, "Select Chapter", true);
+  resetSelect(itemSelect, "Select Topic / Year", true);
+  fillSelect(levelSelect, getKeys(catalog));
+  controls.classList.remove("hidden");
+  const inline = headerBar.querySelector(".inline-topic");
+  if (inline) inline.remove();
+  controls.appendChild(topicLabel);
+  controls.appendChild(itemSelect);
+  document.getElementById("levelSelect").classList.remove("hidden");
+  document.querySelector("label[for='levelSelect']").classList.remove("hidden");
+  document.getElementById("chapterSelect").classList.remove("hidden");
+  document.querySelector("label[for='chapterSelect']").classList.remove("hidden");
+}
 
-    window.addEventListener('resize', () => {
-      const inline = headerBar.querySelector('.inline-topic');
-      if (inline && window.innerWidth <= 600) {
-        controls.appendChild(topicLabel);
-        controls.appendChild(itemSelect);
-        inline.remove();
-      }
-    });
-
-    fillSelect(levelSelect, getKeys(catalog));
-  </script>
+fillSelect(levelSelect, getKeys(catalog));
+</script>
 </body>
 </html>

@@ -3,69 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class-9-Practice Test</title>
+  <title>Class-9 Practice Test</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: "Segoe UI", sans-serif;
       margin: 15px;
-      background: linear-gradient(135deg, #f9f9f9, #e0f7fa);
+      background: linear-gradient(135deg, #e0f7fa, #f9f9f9);
       color: #333;
       font-size: 13px;
     }
 
+    /* ===== Login Container ===== */
     #loginContainer {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
       text-align: center;
+      background: linear-gradient(160deg, #e0f2f1 0%, #b2dfdb 100%);
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      padding: 30px 20px;
+      max-width: 380px;
+      margin: auto;
+    }
+
+    #loginContainer img {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    }
+
+    #loginContainer h2 {
+      color: #004D40;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+    }
+
+    #instructionBox {
+      background: rgba(255,255,255,0.8);
+      border-left: 4px solid #00796B;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    #instructionBox ul {
+      padding-left: 18px;
+      margin: 6px 0;
     }
 
     #loginContainer input {
-      padding: 8px;
+      padding: 10px;
       border: 2px solid #00796B;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       width: 250px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    #loginContainer input:focus {
+      border-color: #004D40;
+      box-shadow: 0 0 6px rgba(0,121,107,0.4);
     }
 
     #loginContainer button {
-      padding: 8px 12px;
-      border: 2px solid #00796B;
-      border-radius: 5px;
-      background-color: #e0f2f1;
-      color: #004D40;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #009688, #00796B);
+      color: white;
       font-size: 13px;
       cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
     }
 
     #loginContainer button:hover {
-      background-color: #b2dfdb;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+      background: linear-gradient(135deg, #26a69a, #004D40);
+    }
+
+    #aboutBox {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #004D40;
+      background: rgba(255,255,255,0.85);
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    #aboutBox strong {
+      color: #00796B;
     }
 
     #appContainer { display: none; }
 
+    /* ===== Header ===== */
     .header-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: nowrap;
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #e0f2f1, #ffffff);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       min-width: 0;
     }
 
     .header-bar h1 {
-      color: #006064;
+      color: #004D40;
       font-size: 16px;
       margin: 0;
       white-space: nowrap;
       flex: 1;
-      min-width: 0;
-      overflow: hidden; 
+      overflow: hidden;
       text-overflow: ellipsis;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.15);
     }
 
     label {
@@ -77,54 +145,107 @@
 
     select, button {
       margin: 4px;
-      padding: 5px 8px;
+      padding: 6px 9px;
       border: 2px solid #00796B;
-      border-radius: 5px;
-      background-color: #e0f2f1;
+      border-radius: 6px;
+      background: linear-gradient(145deg, #e0f2f1, #ffffff);
       color: #004D40;
       font-size: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 
-    select:hover, button:hover { background-color: #b2dfdb; }
+    select:hover, button:hover {
+      background: linear-gradient(145deg, #b2dfdb, #e0f2f1);
+      transform: translateY(-1px);
+    }
 
     button.back-btn {
-      background-color: #b71c1c;
+      background: linear-gradient(135deg, #c62828, #b71c1c);
       color: white;
-      white-space: nowrap;
-      font-size: 12px;
+      font-size: 11px;
       padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      transition: all 0.3s ease;
+    }
+    button.back-btn:hover {
+      background: linear-gradient(135deg, #e53935, #b71c1c);
+      transform: translateY(-1px);
+    }
+
+    button.home-btn {
+      background: linear-gradient(135deg, #f57c00, #ef6c00);
+      color: white;
+      font-size: 11px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      transition: all 0.3s ease;
       flex-shrink: 0;
     }
-    button.back-btn:hover { background-color: #7f0000; }
+
+    button.home-btn:hover {
+      background: linear-gradient(135deg, #fb8c00, #e67e22);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
 
     iframe {
       width: 100%;
       height: 450px;
       border: 2px solid #004D40;
       margin-top: 15px;
-      border-radius: 6px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       transition: height 0.4s ease;
     }
 
+    /* ===== Mobile Fix ===== */
     @media (max-width: 600px) {
       body { font-size: 12px; }
-      .header-bar h1 { font-size: 14px; }
-      label { font-size: 11px; }
-      select, button { 
-        width: 100%; 
-        font-size: 11px;
-        padding: 4px 6px; 
-        margin-top: 8px; 
+      .header-bar {
+        flex-wrap: nowrap;
+        gap: 4px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
-      .header-bar { flex-wrap: nowrap; }
+      .header-bar h1 {
+        font-size: 13px;
+        flex: 1;
+        white-space: nowrap;
+      }
+      .header-bar button { flex-shrink: 0; }
+      label { font-size: 11px; }
+      select, button {
+        width: 100%;
+        font-size: 11px;
+        padding: 5px 7px;
+        margin-top: 6px;
+      }
       iframe { height: 350px; }
+      #loginContainer {
+        width: 90%;
+        padding: 20px;
+      }
     }
 
-    select { white-space: normal !important; height: auto; line-height: 1.2em; }
-    select option { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+    select {
+      white-space: normal !important;
+      height: auto;
+      line-height: 1.2em;
+    }
+
+    select option {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
+    }
+
     select option:nth-child(even) { background-color: #e8f4ff; }
     select option:nth-child(odd) { background-color: #ffffff; }
 
@@ -142,15 +263,36 @@
 
 <body>
   <div id="loginContainer">
+    <img src="https://i.ibb.co/WNZTWPwv/LOGO-PNG-2025-fab.png" alt="G10 Educational Platform Logo" />
     <h2>Login to Class-9 Practice Test</h2>
+
+    <div id="instructionBox">
+      <strong>Instructions:</strong>
+      <ul>
+        <li>Enter your registered email ID to access practice tests.</li>
+        <li>If your email is not registered, contact: +91 9706380857.</li>
+        <li>Each test is time-bound and may include auto-submission.</li>
+        <li>Use the latest browser for the best experience.</li>
+      </ul>
+    </div>
+
     <input type="email" id="emailInput" placeholder="Enter your email" required />
     <button onclick="login()">Login</button>
+
+    <div id="aboutBox">
+      <strong>About G10 Educational Platform:</strong><br>
+      Located at Jayanagar Charali, Beltola Bazaar Road, Guwahati, G10 is an advanced learning hub that prepares students for <b>Board Exams, IIT-JEE, NEET, and CUET</b>.  
+      <br><br>Join us to learn with clarity, discipline, and confidence.
+    </div>
   </div>
 
   <div id="appContainer">
     <div class="header-bar" id="headerBar">
       <h1>Class 9 Practice Test</h1>
-      <button id="backBtn" class="back-btn" onclick="resetAll()">Back</button>
+      <div style="display:flex; gap:4px;">
+        <button id="backBtn" class="back-btn" onclick="resetAll()">Back</button>
+        <button class="home-btn" onclick="window.location.href='https://gten-educational-platform.github.io/Class-12/class 9 button.html'">🏠 Home</button>
+      </div>
     </div>
 
     <div id="controls">
@@ -173,11 +315,9 @@
     <iframe id="viewer" src=""></iframe>
   </div>
 
-
 <script>
 const BACKEND_URL = "https://practice-test-backend-class-9-science-r94f.onrender.com";
 
-// LOGIN SYSTEM
 async function login() {
   const email = document.getElementById("emailInput").value.trim().toLowerCase();
   if (!email || !email.includes("@")) {
@@ -234,7 +374,6 @@ setInterval(async () => {
     location.reload();
   }
 }, 5000);
-
 
 // === MAIN LOGIC ===
  const catalog = {

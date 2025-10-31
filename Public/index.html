@@ -202,9 +202,7 @@ select option:nth-child(odd){background-color:#fff;}
 <body>
 <div id="loginContainer">
   <img src="https://i.ibb.co/WNZTWPwv/LOGO-PNG-2025-fab.png" alt="G10 Educational Platform Logo" />
-  
-  <h2>Login to Class-9 Science Practice Test</h2>
-  
+  <h2>Login to Class 9 Science Practice Test</h2>
   <div id="instructionBox">
     <strong>Instructions:</strong>
     <ul>
@@ -225,9 +223,7 @@ select option:nth-child(odd){background-color:#fff;}
 
 <div id="appContainer">
   <div class="header-bar" id="headerBar">
-  
     <h1>Class 9 Science Practice Test</h1>
-	
     <div style="display:flex; gap:4px;">
       <button id="backBtn" class="back-btn" onclick="resetAll()">Back</button>
       <button class="home-btn" onclick="window.location.href='https://gten-educational-platform.github.io/Class-12/class 9 button.html'">🏠 Home</button>
@@ -235,8 +231,8 @@ select option:nth-child(odd){background-color:#fff;}
   </div>
 
   <div id="controls">
-    <label for="levelSelect">Level / Types:</label>
-    <select id="levelSelect"><option value="">Select Level / Types</option></select>
+    <label for="levelSelect">Level / Years:</label>
+    <select id="levelSelect"><option value="">Select Level / Years</option></select>
     <label for="chapterSelect">Chapter:</label>
     <select id="chapterSelect" disabled><option value="">Select Chapter</option></select>
     <label id="topicLabel" for="itemSelect">Topic / Year:</label>
@@ -299,7 +295,6 @@ setInterval(async()=>{
 },5000);
 
 /* === MAIN LOGIC === */
-/ === MAIN LOGIC ===
  const catalog = {
       "Topic wise mcq (basic)": {
               "Chapter 1 - Matter In Our Surroundings": {
